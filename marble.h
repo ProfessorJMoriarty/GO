@@ -14,6 +14,7 @@ public:
 	void liftUp();
 	void PutDown();
 	bool isLifted();
+	void snap();
 	
 
 };

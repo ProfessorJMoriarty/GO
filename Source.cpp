@@ -7,11 +7,6 @@ using namespace std;
 #include "marble.h"
 
 
-const float FPS = 60;
-const int SCREEN_W = 640;
-const int SCREEN_H = 480;
-
-
 int main()
 {
 	ALLEGRO_DISPLAY *display = NULL;
@@ -25,33 +20,28 @@ int main()
 	al_install_mouse();
 
 	timer = al_create_timer(1.0 / FPS);
-	
-
-	display = al_create_display(SCREEN_W, SCREEN_H);
-	
-
+	display = al_create_display(SCREEN_W, SCREEN_H);	
 	al_set_target_bitmap(al_get_backbuffer(display));
-
 	event_queue = al_create_event_queue();
-
-
 	al_register_event_source(event_queue, al_get_display_event_source(display));
-
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
-
 	al_register_event_source(event_queue, al_get_mouse_event_source());
-
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-
 	al_flip_display();
-
 	al_start_timer(timer);
 
 
-	//initalize pieces
+	//initalize class objects
 	marble m1;
 	m1.initMarble(50,50);
 
+	//set up grid
+	int grid[NUM_ROWS][NUM_ROWS];
+	
+	for (int i = 0; i < NUM_ROWS; i++) {
+		for (int j = 0; j < NUM_ROWS; j++)
+			grid[i][j] = 0;
+	}
 
 	while (1)
 	{
@@ -78,6 +68,7 @@ int main()
 					m1.liftUp();
 				else {
 					m1.PutDown();
+					m1.snap();
 				}
 		}
 
@@ -93,8 +84,13 @@ int main()
 
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 
+			//draw grid
+			for (int i = 0; i < NUM_ROWS; i++) {
+				for (int j = 0; j < NUM_ROWS; j++)
+					al_draw_rectangle(i*SCREEN_W / NUM_ROWS, j*SCREEN_H / NUM_ROWS, i*SCREEN_W / NUM_ROWS+ SCREEN_W / NUM_ROWS, j*SCREEN_H / NUM_ROWS+ SCREEN_H / NUM_ROWS, al_map_rgb(50,50,100), 4);
+			}
 		
-
+			//draw pieces
 			m1.draw();
 
 			al_flip_display();

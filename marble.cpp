@@ -13,27 +13,26 @@ void marble::initMarble(int x, int y) {
 	yPos = y;
 	lifted = false;
 
-
 }
 
 void marble::move(int x, int y) {
 	xPos = x;
 	yPos = y;
-	cout << "moving";
+	//cout << "moving";
 
 }
 
+//checks if you've clicked somewhere in the piece's area
 bool marble::clicked(int x, int y) {
-	cout << " checking " << x << " , " << y << " against marble's position " << xPos << " , " << yPos << endl;
+	//cout << " checking " << x << " , " << y << " against marble's position " << xPos << " , " << yPos << endl;
 	//distance formula
 	if (sqrt( (xPos - x)*(xPos - x) + (yPos  - y)*(yPos  - y) ) < MARBLE_RADIUS ) {
-		cout << "element clicked!" << endl;
+		//cout << "element clicked!" << endl;
 		return true;
 
 	}
 	else
 		return false;
-
 
 }
 
@@ -44,17 +43,32 @@ void marble::draw() {
 
 void marble::liftUp() {
 	lifted = true;
-	cout << "lifted";
+	//cout << "lifted";
 
 }
 
 void marble::PutDown() {
 	lifted = false;
-	cout << "put down";
+	//cout << "put down";
 
 }
 
+//tells curser if a piece is lifted or not
 bool marble::isLifted() {
 
 	return lifted;
+}
+
+//the snap function snaps the piece to the nearest intersection of lines
+void marble::snap() {
+	int rowWidth = SCREEN_W / NUM_ROWS;
+	if (xPos % rowWidth < rowWidth/2)
+		xPos -= xPos % rowWidth;
+	else
+		xPos += rowWidth-(xPos % rowWidth);
+
+	if (yPos % rowWidth < rowWidth / 2)
+		yPos -= yPos % rowWidth;
+	else
+		yPos += rowWidth - (yPos % rowWidth);
 }
